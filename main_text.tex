@@ -19,7 +19,7 @@ E-mail: \email{msilva@icecube.wisc.edu, smancina@icecube.wisc.edu}
 
 \abstract{
 
-IceCube measures the diffuse neutrino flux across several neutrino flavors and energy ranges. ESTES focuses on the measurement of the diffuse neutrino flux using high purity muon neutrinos with energies above 1 TeV. We use the Enhanced Started Track Event Selection (ESTES) sample which selects for tracks starting within the IceCube fiducial volume. We employ use of a machine learning algorithm to help differentiate between tracks from atmospheric and astrophysical neutrinos. This produces a high purity neutrino sample that can provide valuable insight to the properties of the atmospheric and astrophyiscal diffuse neutirno spectrum. Using simulated neutrinos, we show the sensitivity of this diffuse neutrino measurement with ESTES. \\
+IceCube measures the diffuse neutrino flux across several neutrino flavors and energy ranges. ESTES focuses on the measurement of the diffuse neutrino flux using high purity muon neutrinos with energies above 1 TeV. We use the Enhanced Starting Track Event Selection dataset which selects for tracks starting within the IceCube fiducial volume. We employ use of a machine learning algorithm to help differentiate between tracks from atmospheric and astrophysical neutrinos. This produces a high purity neutrino sample that can provide valuable insight to the properties of the atmospheric and astrophysical diffuse neutrino spectrum. Using simulated neutrinos, we show the sensitivity for this measurement of the diffuse neutrino flux with ESTES. \\
 
 % comment the following section if you use analysis@icecube.wisc.edu
 \vspace{4mm}
@@ -42,8 +42,9 @@ IceCube measures the diffuse neutrino flux across several neutrino flavors and e
 %----------------------------------------------------------------------------------------
 
 \section{Introduction}\label{sec:info}
-The Enhanced Starting Track Event Selection (ESTES) is an event selection using IceCube data currently under development. The primary goal is simple, to obtain a high purity diffuse muon neutrino sample for neutrino energies between 1-100 TeV. However, due to the significant presence of atmospheric muons at these energy ranges, one must employ sophisticated veto techniques. Ongoing work to increase the neutrino purity is shown in these proceedings. \\
-Once a high purity sample of neutrinos is obtained, many interesting physics topics can be explored. One possibility is to add this event selection to the real time alerts IceCube sends to the multi-messenger community\cite{ESTESv1:2019icrc_ESTESv1}. ESTES can also be used to measure the astrophysical diffuse neutrino flux, including (but not limited to) the overall normalization and spectral index. The large presence of atmospheric neutrinos suggests strong constraints can be placed over various atmospheric flux models. An estimate of the expected astrophysical neutrino rates are shown in this presentation, where several measured fluxes are simulated and the total neutrino rates are computed.
+The Enhanced Starting Track Event Selection (ESTES) is an event selection using IceCube data currently under development. The primary goal is simply to obtain a high purity diffuse muon neutrino sample for neutrino energies between 1-100 TeV. However, due to the significant presence of atmospheric muons at these energy ranges, one must employ sophisticated veto techniques. Ongoing work to increase the neutrino purity is shown in this proceeding. \\
+Once a high purity sample of neutrinos is obtained, many interesting physics topics can be explored. One possibility is to add this event selection to the real time alerts IceCube sends to the multi-messenger community\cite{ESTESv1:2019icrc_ESTESv1}. ESTES can also be used to measure the astrophysical diffuse neutrino flux, including (but not limited to) the overall normalization and spectral index. The large presence of atmospheric neutrinos suggests strong constraints can be placed on various atmospheric flux models. Estimates of the expected astrophysical neutrino rates for ESTES are shown in
+this presentation. 
 
 %----------------------------------------------------------------------------------------
 %	Simulation
@@ -52,11 +53,11 @@ Once a high purity sample of neutrinos is obtained, many interesting physics top
 \section{Simulation}\label{sec:sim}
 
 \subsection{Monte Carlo Samples}\label{sec:MC}
-Atmospheric muons are generated using the CORSIKA package and are inclusive of events with multiple muons. The livetime of this dataset corresponds to 1 year of data taking and consists of 100 million events. Additional single muon events are generated using a parametrized version of muons at depth in ice. The livetime of this dataset corresponds to over 10 years and consists of over 1 billion events. Both single and multiple muon datasets are weighted to the Gaisser H4a flux.\\
-The astrophysical and atmospheric neutrinos are injected near the IceCube surface and within the IceCube volume. The neutrinos are forced to interact within IceCube with the probability of interaction taken into account within the weighting. At this point, the atmospheric neutrinos are weighted to the Honda flux\cite{Atmos:Honda}. In addition, the astrophysical neutrinos are weighted to a single power law with a predefined overall normalization and spectral index.
+Atmospheric muons are generated using the CORSIKA package and include events with multiple muons. The livetime of this dataset corresponds to 1 year of data taking and consists of 100 million events. Additional single muon events are generated using a parametrized version of muons at depth in ice. The livetime of this dataset corresponds to over 10 years and consists of over 3 billion events. When computing rates, the assumed flux is from Gaisser H4a\cite{H4a}.\\
+The astrophysical neutrinos are injected near the IceCube surface and within the IceCube volume. The neutrinos are forced to interact within IceCube with the probability of interaction taken into account as a scaling factor when deriving the rates. At this point, the astrophysical neutrinos rate of observation is derived assuming a single power law flux with a predefined overall normalization and spectral index.
 
 \subsection{Reconstructions}\label{sec:Reco}
-The SplineMPE track reconstruction calculates the muon track direction using the number of photo electrons deposited in each optical module along with timing information. This reconstruction has been shown to yield median angular resolution lower than 1$\cdot$ for a wide range of energies, including our energies of interest \cite{angular_res}. The muon track is then used as a seed to the Millipede package to extract the energy losses along the track. Millipede splits the total track into 10m long track segments and estimates the energy lost per segment. The energy resolution for our energies of interest is below 10$\%$ \cite{energy_res}.
+The SplineMPE track reconstruction calculates the muon track direction using the number of photo electrons deposited in each optical module along with timing information. This reconstruction has been shown to yield median angular resolution lower than 1$^\circ$ for a wide range of energies, including our energies of interest \cite{angular_res}. We then estimated the energy losses along the SplineMPE muon track using the Millipede algorithm. Millipede splits the total track into 10m long track segments and estimates the energy lost per segment. Since we are interested in starting tracks only, some energy is not measured when the track exits the detector, therefore these estimates serve only as a lower limit on the energy. The energy resolution for our energies of interest is below 10$\%$ \cite{energy_res}.
 
 %----------------------------------------------------------------------------------------
 %	Event Selection
@@ -64,26 +65,34 @@ The SplineMPE track reconstruction calculates the muon track direction using the
 
 \section{Event Selection}\label{sec:ESTES}
 \subsection{Previous Work}\label{sec:ESTES_startingtrack}
-ESTES can be summarized in 2 steps that each aim to heavily reduce atmospheric muon rates. The first step employs a starting track veto (STV) used to reduce the number of muon tracks that can sneak into IceCube. Figure \ref{fig:STV} shows how this STV is executed for a particular muon track event. The STV works by computing a probability of the IceCube DOM to observe PEs given a muon track hypothesis in the dark region. A cut is then applied on this probability which reduces the expected atmospheric muon rates from over 100 million down to 10 thousand per year. To learn more details pertaining to this veto please see \cite{Kyle:ESTES} \& \cite{Mancina:ESTES}. A boosted decision tree (BDT) is then used which reduces the expected muon rate from about 10 thousand per year to 1 per year. Much effort was put into this BDT to maximize the number of accepted neutrinos which is required with such an event selection.
+ESTES can be summarized in 2 steps that each aim to heavily reduce atmospheric muon rates. The first step employs a starting track veto (STV) used to reduce the number of muon tracks in the data sample. Figure \ref{fig:STV} shows how this STV is executed for a particular muon track event. The STV works by computing a probability of the IceCube DOM to observe PEs given a muon track hypothesis in the dark region. A cut is then applied on this probability which reduces the expected atmospheric muon rates from over 100 million down to 10 thousand per year. To learn more details pertaining to this veto please see \cite{Kyle:ESTES} \& \cite{Mancina:ESTES}. A boosted decision tree (BDT) is then used which reduces the expected muon rate from about 10 thousand per year to 1 per year. Much effort was put into this BDT to maximize the number of starting track neutrinos in our final data sample.
 
 \begin{figure}[h!]
 \centering 
     \includegraphics[width=0.85\linewidth]{VetoGraphic_V2_AtmoNu.png}
-    \caption{The dark region is shown in red and represents the region where one would expect to see energy losses given a muon that is continuously emitting electromagnetic radiation. This "dark region" is geometrically constructed using the Cerenkov cone produced from the location where the first PE is observed, eg the vertex. }
+    \caption{The dark region is shown in red and represents the region where one would expect to see energy losses given a muon that is continuously emitting electromagnetic radiation. This "dark region" is geometrically constructed using the Cherenkov cone produced from the location where the first PE is observed, eg the vertex. }
 \label{fig:STV}
 \end{figure}
 
 \subsection{Boosted Decision Tree}\label{sec:ESTES_BDT}
 We use the XGBoost BDT (eXtreme Gradient Boosting \cite{Chen:2016:XST:2939672.2939785})  to help filter atmospheric muons. The XGB algorithm was chosen due to resistance to over-training, speed, and high accuracy in correctly classifying neutrinos and muons.\\
-The BDT was trained using the reconstructed parameters from section\ref{sec:Reco} as input. The most important input after training the BDT is the energy lost in the first segment divided by the total energy loss along the track, fraction of energy lost in first segment. An equally important input to the BDT is the expected distance from the reconstructed vertex to the estimated point of entry to IceCube. Figure \ref{fig:BDTinputs} show these variables used to train the BDT for both muons and muon neutrinos. After the BDT is trained, a BDT classification score is produced for each individual event. For the purposes of training an unbiased BDT, 30\% of the total Monte Carlo is used for testing purposes only and is exclusive of the training dataset. If the BDT is over-fit to the training Monte Carlo sample, the test sample would be in clear disagreement with the training sample. A two-sided Kolmogorov Smirnov test is used to test the probability that the train and test samples come from the same distribution. A p-value of 0.30 is obtained for both muons and neutrinos which is satisfactory to conclude that the BDT model is not over-fit, for reference p-values of 0.01 are usually enough for one to go back and re-optimize all stages of the BDT. The distribution of BDT classification scores are shown in figure \ref{fig:BDToutputs} along with a ratio of the test to train datasets.
+
+\begin{figure}[h!]
+\centering 
+    \includegraphics[width=0.85\linewidth]{BDT_Variables_ESTES.png}
+    \caption{The 15 variables used to train the BDT and classify individual events.}
+\label{fig:BDT_variables}
+\end{figure}
+
+The BDT was trained using the reconstructed parameters from section \ref{sec:Reco} as input. For a complete list of the input variables see figure \ref{fig:BDT_variables}. After the training is completed, a ranking of the 15 input parameter's contribution to the accuracy is computed. The most important variable for training is the energy lost in the first segment divided by the total energy loss along the track, fraction of energy lost in first segment. An equally important input to the BDT is the expected distance from the reconstructed vertex to the estimated point of entry to IceCube. Figure \ref{fig:BDTinputs} show these variables used to train the BDT for both muons and muon neutrinos. After the BDT is trained, a BDT classification score is produced for each individual event. For the purposes of training a stable BDT, 30\% of the total Monte Carlo is used for testing purposes only and is exclusive of the training dataset. If the BDT is over-fit to the training Monte Carlo sample, the test sample would be in clear disagreement with the training sample. A two-sided Kolmogorov Smirnov test is used to test the probability that the train and test samples come from the same distribution. A p-value of 0.30 is obtained for both muons and neutrinos which is satisfactory to conclude that the BDT model is not over-fit. The distribution of BDT classification scores are shown in figure \ref{fig:BDToutputs} along with a ratio of the test to train datasets.
 
 \begin{figure}[h!]
   \centering
   \begin{subfigure}[b]{0.49\linewidth}
-    \includegraphics[width=\linewidth]{bdt_input_Fraction_of_Energy_Lost_in_First_Segment.pdf}
+    \includegraphics[width=\linewidth]{bdt_input_total_Fraction_of_Energy_Lost_in_First_Segment.pdf}
   \end{subfigure}
   \begin{subfigure}[b]{0.49\linewidth}
-    \includegraphics[width=\linewidth]{bdt_input_Distance_to_Detector_Entry_Along_Track.pdf}
+    \includegraphics[width=\linewidth]{bdt_input_total_Distance_to_Detector_Entry_Along_Track.pdf}
   \end{subfigure}
   \caption{Most important inputs for training the BDT. No weights are applied to training therefore the distributions are exactly as seen by the BDT.}
   \label{fig:BDTinputs}
@@ -96,7 +105,7 @@ The BDT was trained using the reconstructed parameters from section\ref{sec:Reco
 \label{fig:BDToutputs}
 \end{figure}
 
-Once the BDT is trained and optimized, a cut of 1 muon per year is chosen, all neutrinos above this cut will eventually enter the final event selection. Figure \ref{fig:BDT_cuts} shows the cumulative number of muons and astrophysical neutrinos entering the final dataset given a particular BDT cut.
+Once the BDT is trained and optimized, a cut of 1 muon per year is chosen which corresponds to a BDT score of 0.991, all events above this cut will enter the final event selection. Figure \ref{fig:BDT_cuts} shows the cumulative number of muons and astrophysical neutrinos entering the final dataset given a particular BDT cut.
 
 \begin{figure}[h!]
 \centering 
@@ -137,7 +146,7 @@ The presence of a muon track entering IceCube is sufficient to trigger the veto 
 For the purpose of a sensitivity study, three IceCube fluxes are injected. These are provided as a differential flux in units 
 
 \begin{equation}
-\frac{d\Phi}{dE} = \Phi_{0} * 10^{-18} * (\frac{E_{\nu}}{10^{5} GeV})^{-\gamma} (\frac{1}{GeV*cm^{2}*sr*s})
+\frac{\mathrm{d}\Phi}{\mathrm{dE}} = \Phi_{0} \times 10^{-18} \times (\frac{\mathrm{E}_{\nu}}{10^{5} \mathrm{GeV}})^{-\gamma} (\frac{1}{\mathrm{GeV\cdot cm^{2}\cdot sr\cdot s}})
 \end{equation}
 
 , where the two parameters of interest in the fit are $\Phi_{0}$ and $\gamma$. 
@@ -161,7 +170,7 @@ NuMu\cite{icrc:numu} & 1.44 & 2.28 & 4.15 $\pm0.02$ \\ \hline
 %----------------------------------------------------------------------------------------
 
 \section{Conclusion and Future Work}\label{sec:Conclusion}
-The last step in the ESTES event selection was shown to yield negligible amounts of background contamination from atmospheric muons with an efficiency of over 80$\%$ to keep neutrinos with starting tracks. Various diffuse neutrino spectra were injected and yield comparable results. \textcolor{red}{The atmospheric neutrino flux was also shown with the muon veto efficiency taken into account as a function of the energy and BDT score. Still need to do!!}
+The last step in the ESTES event selection was shown to yield negligible amounts of background contamination from atmospheric muons with an efficiency of over 80$\%$ to keep neutrinos with starting tracks. Various diffuse neutrino spectra were injected and yield comparable results.
 \\
 At this point, there are many checks undergoing to validate the overall event selection and prepare for data. The eventual goal is to produce a diffuse neutrino fit using all IC-86 IceCube data which, up to ICRC 2019, corresponds to 8 years of data. Once the data is checked for compatibility with the Monte Carlo, a fit to the astrophysical diffuse neutrino spectrum will be performed. This will be followed by a release of a new realtime event stream to the multi-messenger community.
 
